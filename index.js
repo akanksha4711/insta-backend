@@ -1,7 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const { userLogin, userSignup } = require("./controllers/auth.controller");
+const { userRouter } = require("./routers/user.router");
+const { postRouter } = require("./routers/post.router");
+const { commentRouter } = require("./routers/comment.router");
 
 const app = express();
 
@@ -11,9 +13,12 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // Middleware, common mistake
 app.use(express.json());
 
-app.post("/login", userLogin);
-
-app.post("/signup", userSignup);
+// login/signup routes
+app.use("/", userRouter);
+// post routes
+app.use("/posts", postRouter);
+// comment routes
+app.use("/comments", commentRouter);
 
 app.listen(PORT, () => {
   console.log("Listening on port ", PORT);
