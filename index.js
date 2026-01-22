@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { userRouter } = require("./routers/user.router");
 const { postRouter } = require("./routers/post.router");
 const { commentRouter } = require("./routers/comment.router");
+const cors = require("cors");
 
 const app = express();
 
@@ -12,6 +13,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware, common mistake
 app.use(express.json());
+app.use(cors());
 
 // login/signup routes
 app.use("/", userRouter);

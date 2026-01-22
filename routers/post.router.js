@@ -17,7 +17,7 @@ postRouter.post("/", verifyAuth, createPost);
 // method: post, route: /posts/like/:postId, middleware: verifyAuth, controller: toggleLike
 postRouter.post("/like/:postId", verifyAuth, toggleLike);
 // method: put, route: /posts/:postId, middleware: verifyAuth, controller: updatePost
-postRouter.put("/:postId", verifyAuth, updatePost);
+postRouter.patch("/:postId", verifyAuth, updatePost);
 postRouter.delete("/:postId", verifyAuth, deletePost);
 
 module.exports = { postRouter };
