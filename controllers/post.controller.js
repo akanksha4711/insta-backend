@@ -5,7 +5,9 @@ const { User } = require("../models/user.model");
 const getAllPosts = async (request, response) => {
   // const {postId} = request.params;
   try {
-    const posts = await Post.find().populate("author", "username email name");
+    const posts = await Post.find()
+      .populate("author", "username email name")
+      .sort({ createdAt: -1 });
 
     return response.status(200).json(posts);
   } catch (err) {
@@ -36,7 +38,12 @@ const createPost = async (request, response) => {
       return response.status(500).json({ message: "Internal server error" });
     }
 
-    return response.status(200).json(savedPost);
+    const populatedPost = await Post.findById(savedPost._id).populate(
+      "author",
+      "username name email",
+    );
+
+    return response.status(200).json(populatedPost);
   } catch (err) {
     return response.status(500).json({ message: "Internal server error" });
   }
@@ -60,7 +67,7 @@ const toggleLike = async (request, response) => {
     // do : remove user from post.likes
     if (isLiked) {
       post.likes = post.likes.filter(
-        (uid) => uid.toString() !== userId.toString()
+        (uid) => uid.toString() !== userId.toString(),
       );
     }
     // Case 2: if not liked
@@ -78,7 +85,12 @@ const toggleLike = async (request, response) => {
       });
     }
 
-    return response.status(200).json(savedPost);
+    const populatedPost = await Post.findById(savedPost._id).populate(
+      "author",
+      "username name email",
+    );
+
+    return response.status(200).json(populatedPost);
   } catch (err) {
     return response.status(500).json({ message: "Internal server error" });
   }

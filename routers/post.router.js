@@ -7,6 +7,7 @@ const {
   updatePost,
   deletePost,
 } = require("../controllers/post.controller");
+const parser = require("../utilities/upload");
 
 const postRouter = express.Router();
 
@@ -19,5 +20,15 @@ postRouter.post("/like/:postId", verifyAuth, toggleLike);
 // method: put, route: /posts/:postId, middleware: verifyAuth, controller: updatePost
 postRouter.patch("/:postId", verifyAuth, updatePost);
 postRouter.delete("/:postId", verifyAuth, deletePost);
+// /upload , middlewares: verifyAuth, parser -> req.file = file
+postRouter.post("/upload", verifyAuth, parser.single("file"), (req, res) => {
+  // something inside upload.
+  try {
+    const url = req.file.path;
+    return res.status(200).json({ imageUrl: url });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = { postRouter };
